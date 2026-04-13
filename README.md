@@ -6,15 +6,19 @@ Uso: Laboratorio de Ciberseguridad, Phishing y Pruebas de Red.
 ________________________________________
 
 1. INTRODUCCIÓN
+
 El presente manual describe el procedimiento técnico para el despliegue de un sistema de mensajería unificado en entorno local, diseñado específicamente para laboratorios de ciberseguridad, pruebas de penetración y simulaciones de ingeniería social.
 A diferencia de un servidor de producción orientado a Internet, este entorno se centra en la interoperabilidad entre herramientas de auditoría (como Gophish o Swaks) y un servidor de correo interno robusto basado en el estándar MTA/MDA (Message Transfer Agent / Message Delivery Agent). La arquitectura utiliza Postfix para la transferencia de mensajes y Dovecot para la gestión de buzones, integrando una interfaz web mediante Roundcube para facilitar la interacción del usuario final.
 Objetivos del Laboratorio:
+
 •	Simulación de Vectores de Ataque: Permitir el envío de campañas de phishing controladas sin riesgo de filtración a redes externas.
 •	Validación de Protocolos: Analizar el comportamiento de las cabeceras SMTP y los mecanismos de autenticación SASL en un entorno aislado.
 •	Gestión de Usuarios: Administrar múltiples cuentas de correo locales para la validación de entrega y respuesta.
 ________________________________________
 2. ARQUITECTURA Y FLUJO DE DATOS
+
 El correo sigue el siguiente trayecto técnico:
+
 1.	Emisión: Gophish/Swaks conecta vía SMTP (Puerto 25) con Postfix.
 2.	Recepción: Postfix valida la IP de origen y entrega el mensaje a Dovecot.
 3.	Almacenamiento: El mensaje se guarda en formato Maildir en la carpeta del usuario.
