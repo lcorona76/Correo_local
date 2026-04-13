@@ -73,7 +73,7 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
   <pre><code>sudo apt update && sudo apt install postfix mailutils</code></pre>
 </div>
 
-<p>Selecciona <em>Local Only</em> si es solo interno.</p>
+<p>Durante la instalación, selecciona <em>"Local only"</em> (Solo local) si solo quieres que el correo circule dentro de la misma máquina, o "Internet Site" si planeas enviar correos a dominios externos en el futuro.</p>
 
 <h3>Archivo principal</h3>
 <p><code>/etc/postfix/main.cf</code></p>
