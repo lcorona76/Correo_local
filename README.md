@@ -1,30 +1,3 @@
-<style>
-  .cmd-box {
-    position: relative;
-    margin: 1em 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #0d1117;
-    color: #c9d1d9;
-    font-family: monospace;
-  }
-  .cmd-box pre {
-    margin: 0;
-    padding: 1em;
-    overflow-x: auto;
-  }
-  .cmd-box button {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    font-size: 12px;
-    padding: 4px 8px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-</style>
-
 <script>
 function copyCmd(btn) {
   const code = btn.nextElementSibling.innerText;
