@@ -1,127 +1,158 @@
-MANUAL DE INSTALACIÓN Y CONFIGURACIÓN: LABORATORIO DE CORREO LOCAL
-
-Versión: 1.0
-
-Uso: Laboratorio de Ciberseguridad, Phishing y Pruebas de Red.
-________________________________________
-
-1. INTRODUCCIÓN
-
-El presente manual describe el procedimiento técnico para el despliegue de un sistema de mensajería unificado en entorno local, diseñado específicamente para laboratorios de ciberseguridad, pruebas de penetración y simulaciones de ingeniería social.
-A diferencia de un servidor de producción orientado a Internet, este entorno se centra en la interoperabilidad entre herramientas de auditoría (como Gophish o Swaks) y un servidor de correo interno robusto basado en el estándar MTA/MDA (Message Transfer Agent / Message Delivery Agent). La arquitectura utiliza Postfix para la transferencia de mensajes y Dovecot para la gestión de buzones, integrando una interfaz web mediante Roundcube para facilitar la interacción del usuario final.
-Objetivos del Laboratorio:
-
-•	Simulación de Vectores de Ataque: Permitir el envío de campañas de phishing controladas sin riesgo de filtración a redes externas.
-•	Validación de Protocolos: Analizar el comportamiento de las cabeceras SMTP y los mecanismos de autenticación SASL en un entorno aislado.
-•	Gestión de Usuarios: Administrar múltiples cuentas de correo locales para la validación de entrega y respuesta.
-________________________________________
-2. ARQUITECTURA Y FLUJO DE DATOS
-
-El correo sigue el siguiente trayecto técnico:
-
-1.	Emisión: Gophish/Swaks conecta vía SMTP (Puerto 25) con Postfix.
-2.	Recepción: Postfix valida la IP de origen y entrega el mensaje a Dovecot.
-3.	Almacenamiento: El mensaje se guarda en formato Maildir en la carpeta del usuario.
-4.	Visualización: El usuario accede vía HTTP (Apache) a Roundcube, que lee el correo mediante IMAP (Puerto 143).
-________________________________________
-3. ARQUITECTURA Y FLUJO DE DATOS
-
-El siguiente esquema describe el trayecto de un correo electrónico desde su generación en la herramienta de auditoría hasta su visualización por el usuario final.
-Esquema de Red (Flujo SMTP/IMAP)
-
- 
-Descripción del Proceso:
-1.	Originación (SMTP): El emisor (Gophish o Swaks) se conecta al servidor Postfix a través del puerto 25. Al estar en la misma red y autorizada la IP, el servidor acepta el mensaje sin requerir autenticación externa.
-2.	Procesamiento y Filtro: Postfix analiza el destinatario. Al detectar que el dominio es local (ej. localhost o servidor.local), lo transfiere al agente de entrega.
-3.	Almacenamiento (Maildir): El correo se guarda físicamente en el directorio del usuario dentro del sistema Linux bajo la estructura de carpetas Maildir.
-4.	Acceso Final (IMAP/HTTP): El usuario accede a la URL de Roundcube. PHP se comunica con Dovecot vía IMAP (puerto 143) para "leer" los archivos en el servidor y mostrarlos gráficamente en el navegador.
-________________________________________
-
-1. Preparación del Sistema
-Instalar los paquetes base para el MTA (Postfix), el MDA (Dovecot) y herramientas de gestión.
-
-bash
-sudo apt update
-sudo apt install postfix dovecot-imapd mailutils php-intl php-mbstring php-gd php-xml php-mysql php-zip apache2 mariadb-server -y
-Usa el código con precaución.
-
-Nota: Durante la instalación de Postfix, selecciona "Internet Site" y define tu dominio (ej. servidor.local).
-
-2. Configuración de Usuarios
-
-Crea los usuarios de Linux que funcionarán como cuentas de correo:
-
-bash
-sudo adduser user1
-sudo adduser user2
-
-Usa el código con precaución.
-
-3. Configuración de Postfix (Envío)
-
-Edita /etc/postfix/main.cf para permitir conexiones de red y autenticación:
-Escucha: inet_interfaces = all
-Confianza: mynetworks = 127.0.0.0/8, [::1]/128, IP_MAQUINA_GOPHISH
-Formato de buzón: home_mailbox = Maildir/
-Autenticación SASL:
-conf
-smtpd_sasl_type = dovecot
-smtpd_sasl_path = private/auth
-smtpd_sasl_auth_enable = yes
-smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination
-
-Usa el código con precaución.
-
-Reiniciar: sudo systemctl restart postfix
-
-4. Configuración de Dovecot (Recepción)
-
-Configura Dovecot para que Postfix pueda validar usuarios y habilitar el acceso local.
-En /etc/dovecot/conf.d/10-mail.conf: mail_location = maildir:~/Maildir
-En /etc/dovecot/conf.d/10-auth.conf: disable_plaintext_auth = no
-En /etc/dovecot/conf.d/10-master.conf:
-conf
-service auth {
-  unix_listener /var/spool/postfix/private/auth {
-    mode = 0660
-    user = postfix
-    group = postfix
+<style>
+  .cmd-box {
+    position: relative;
+    margin: 1em 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: monospace;
   }
+  .cmd-box pre {
+    margin: 0;
+    padding: 1em;
+    overflow-x: auto;
+  }
+  .cmd-box button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    font-size: 12px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+function copyCmd(btn) {
+  const code = btn.nextElementSibling.innerText;
+  navigator.clipboard.writeText(code);
+  btn.innerText = "Copiado ✅";
+  setTimeout(() => btn.innerText = "Copiar", 1500);
 }
-Usa el código con precaución.
+</script>
 
-Reiniciar: sudo systemctl restart dovecot
+<h1>MANUAL DE INSTALACIÓN Y CONFIGURACIÓN: LABORATORIO DE CORREO LOCAL</h1>
+<p><strong>Versión:</strong> 1.0<br>
+<strong>Uso:</strong> Laboratorio de Ciberseguridad, Phishing y Pruebas de Red</p>
 
-5. Instalación de Webmail (Roundcube)
+<hr>
 
-Base de Datos:
+<h2>1. INTRODUCCIÓN</h2>
+<p>
+Este manual describe el procedimiento técnico para el despliegue de un sistema de mensajería unificado en entorno local,
+diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulaciones de ingeniería social.
+</p>
 
-sql
+<ul>
+  <li><strong>Simulación de Vectores de Ataque:</strong> Envío de phishing controlado</li>
+  <li><strong>Validación de Protocolos:</strong> Análisis de SMTP y SASL</li>
+  <li><strong>Gestión de Usuarios:</strong> Múltiples buzones locales</li>
+</ul>
+
+<hr>
+
+<h2>2. ARQUITECTURA Y FLUJO DE DATOS</h2>
+<ol>
+  <li>Emisión: Gophish/Swaks → Postfix (SMTP 25)</li>
+  <li>Recepción: Postfix valida IP → Dovecot</li>
+  <li>Almacenamiento: Formato Maildir</li>
+  <li>Visualización: Roundcube vía IMAP (143)</li>
+</ol>
+
+<hr>
+
+<h2>4. INSTALACIÓN DEL SERVIDOR (Postfix)</h2>
+
+<h3>Instalación básica</h3>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo apt update && sudo apt install postfix mailutils</code></pre>
+</div>
+
+<p>Selecciona <em>Local Only</em> si es solo interno.</p>
+
+<h3>Archivo principal</h3>
+<p><code>/etc/postfix/main.cf</code></p>
+
+<ul>
+  <li><code>myhostname = servidor.local</code></li>
+  <li><code>mydestination = $myhostname, localhost</code></li>
+  <li><code>inet_interfaces = loopback-only</code></li>
+</ul>
+
+<hr>
+
+<h2>5. CONFIGURACIÓN DE USUARIOS</h2>
+
+<h3>Crear usuarios en Linux</h3>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo adduser user1
+sudo adduser user2</code></pre>
+</div>
+
+<h3>Habilitar Maildir</h3>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo nano /etc/postfix/main.cf
+home_mailbox = Maildir/
+sudo systemctl restart postfix</code></pre>
+</div>
+
+<h3>Prueba de envío</h3>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>echo "Hola usuario 2" | mail -s "Prueba Local" user2@localhost</code></pre>
+</div>
+
+<hr>
+
+<h2>6. CONFIGURACIÓN DE WEBMAIL (Roundcube)</h2>
+
+<h3>Instalar dependencias</h3>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo apt install apache2 mariadb-server php php-mysql libapache2-mod-php \
+php-xml php-mbstring php-intl php-zip php-curl php-gd php-imagick -y</code></pre>
+</div>
+
+<h3>Crear base de datos</h3>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo mysql -u root
 CREATE DATABASE roundcubemail;
-GRANT ALL PRIVILEGES ON roundcubemail.* TO 'roundcube'@'localhost' IDENTIFIED BY 'tu_password';
+CREATE USER 'roundcubeuser'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON roundcubemail.* TO 'roundcubeuser'@'localhost';
 FLUSH PRIVILEGES;
+EXIT;</code></pre>
+</div>
 
-Usa el código con precaución.
+<hr>
 
-Archivos: Descarga Roundcube en /var/www/html/roundcube y asigna permisos:
+<h2>8. PRUEBAS Y TROUBLESHOOTING</h2>
 
-bash
-sudo chown -R www-data:www-data /var/www/html/roundcube/
-sudo chmod -R 775 /var/www/html/roundcube/temp/ /var/www/html/roundcube/logs/
+<h3>Prueba SMTP con Swaks</h3>
 
-Usa el código con precaución.
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>swaks --to user2@localhost \
+--from "Soporte &lt;soporte@localhost&gt;" \
+--header "Subject: Prueba" \
+--body "Hola" --server IP_SERVIDOR</code></pre>
+</div>
 
-Inicialización: Accede a http://localhost/roundcube/installer, configura el DSN de la base de datos y ejecuta el botón "Initialize Database".
+<h3>Ver logs en tiempo real</h3>
 
-6. Pruebas de Conectividad
-
-Desde la red con Swaks (Simulación simple):
-bash
-swaks --to user2@localhost --from user1@localhost --server IP_SERVIDOR_POSTFIX
-Usa el código con precaución.
-
-Desde Gophish (Phishing simulado):
-
-Host: IP_SERVIDOR_POSTFIX:25
-From: Cualquier Nombre <user1@localhost>
-Auth: Desactivada (ya que la IP de Gophish está en mynetworks).
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo tail -f /var/log/mail.log</code></pre>
+</div>
