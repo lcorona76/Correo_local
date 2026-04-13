@@ -60,6 +60,19 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <h2>Complementos esenciales para un servidor completo. </h2>
 <p>Postfix por sí solo solo envía/recibe; para leer los correos desde un cliente o webmail, necesitarás:</p> 
+<ul>
+  <li><b>Dovecot:</b> Funciona como el agente de entrega (MDA) que permite acceder a los buzones mediante protocolos IMAP o POP3.</li>
+  <li><b>Webmail:</b> Herramientas como Roundcube permiten visualizar los correos desde un navegador.</li>
+  <li><b>Mailx:</b> Una utilidad de línea de comandos muy útil para realizar pruebas rápidas de envío: echo "Contenido" | mail -s "Asunto" usuario@localhost. </li>
+</ul>
+
+<h2>Puertos comunes</h2>
+
+<p>Si configuras clientes externos para conectar con tu Postfix local, ten en cuenta los puertos estándar:</p>
+<ul>
+  <li>SMTP: Puerto 25 (sin cifrado) o 587 (con STARTTLS).</li>
+  <li>SMTPS: Puerto 465 (cifrado SSL/TLS).</li>
+</ul>
 
 <hr>
 
