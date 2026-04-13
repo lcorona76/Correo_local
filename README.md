@@ -1,8 +1,8 @@
 <h1>MANUAL DE INSTALACIÓN Y CONFIGURACIÓN: LABORATORIO DE CORREO LOCAL</h1>
 <p><strong>Versión:</strong> 1.0<br>
 <strong>Uso:</strong> Laboratorio de Ciberseguridad, Phishing y Pruebas de Red<br>
-<strong>Sistema Operativo:</strong> Ubuntu 24.04<br></p>
-
+<strong>Sistema Operativo:</strong> Ubuntu 24.04<br>
+Antes de iniciar se actualizo sistema operativo</p>
 <hr>
 
 <h2>1. INTRODUCCIÓN</h2>
