@@ -40,6 +40,8 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 <p>Durante la instalación, selecciona <em>"Local only"</em> (Solo local) si solo quieres que el correo circule dentro de la misma máquina, o "Internet Site" si planeas enviar correos a dominios externos en el futuro.</p>
 
 <h3>Archivo principal</h3>
+<p>El archivo de configuración principal se encuentra en /etc/postfix/main.cf. Para un entorno local, asegúrate de ajustar estos parámetros: </p>
+
 <p><code>/etc/postfix/main.cf</code></p>
 
 <ul>
