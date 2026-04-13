@@ -135,13 +135,16 @@ Reinicia: sudo systemctl restart dovecot</code></pre>
 <p>Para conectar un cliente de escritorio a tu entorno de pruebas:</p>
 <ul>
   <li><b>Servidor SMTP/IMAP:</b> localhost o la IP local de tu servidor.</li>
-  <li><b>Usuario/Password:</b> Los mismos que creaste en el paso 1.</li>
+  <li><b>Usuario/Password:</b> Los mismos que creaste anteriormente.</li>
   <li><b>Seguridad:</b> Selecciona "Ninguna" o "STARTTLS" (si configuraste certificados) y permite contraseñas normales/planas para pruebas locales.</li>
 </ul>
 
 <hr>
 
 <h2>6. CONFIGURACIÓN DE WEBMAIL (Roundcube)</h2>
+
+<p>Para un entorno de pruebas local, Roundcube es la opción más sólida y profesional. Es ligero, tiene una interfaz moderna y funciona perfectamente sobre Apache o Nginx.</p>
+<p>Aquí tienes los pasos para configurarlo en un servidor basado en Ubuntu/Debian:</p>
 
 <h3>Instalar dependencias</h3>
 
