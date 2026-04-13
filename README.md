@@ -131,6 +131,14 @@ Reinicia: sudo systemctl restart dovecot</code></pre>
   <pre><code>echo "Hola usuario 2" | mail -s "Prueba Local" user2@localhost</code></pre>
 </div>
 
+<h3>Configuración del Cliente de Correo</h3>
+<p>Para conectar un cliente de escritorio a tu entorno de pruebas:</p>
+<ul>
+  <li><b>Servidor SMTP/IMAP:</b> localhost o la IP local de tu servidor.</li>
+  <li><b>Usuario/Password:</b> Los mismos que creaste en el paso 1.</li>
+  <li><b>Seguridad:</b> Selecciona "Ninguna" o "STARTTLS" (si configuraste certificados) y permite contraseñas normales/planas para pruebas locales.</li>
+</ul>
+
 <hr>
 
 <h2>6. CONFIGURACIÓN DE WEBMAIL (Roundcube)</h2>
