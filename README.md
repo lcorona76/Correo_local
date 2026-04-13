@@ -111,7 +111,7 @@ sudo systemctl restart postfix</code></pre>
 
 <div class="cmd-box">
   <button onclick="copyCmd(this)">Copiar</button>
-  <pre><code>sudo apt install dovecot-imapd
+  <pre><code>sudo apt install dovecot-imapd</code></pre>
 </div>
     
 <p>Configuración básica: En /etc/dovecot/conf.d/10-mail.conf, asegúrate de que coincida con Postfix:</p>
@@ -119,7 +119,7 @@ sudo systemctl restart postfix</code></pre>
 <div class="cmd-box">
   <button onclick="copyCmd(this)">Copiar</button>
   <pre><code>mail_location = maildir:~/Maildir
-Reinicia: sudo systemctl restart dovecot
+Reinicia: sudo systemctl restart dovecot</code></pre>
 </div>
 
 <h3>Prueba de envío</h3>
