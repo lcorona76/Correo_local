@@ -1,12 +1,3 @@
-<script>
-function copyCmd(btn) {
-  const code = btn.nextElementSibling.innerText;
-  navigator.clipboard.writeText(code);
-  btn.innerText = "Copiado ✅";
-  setTimeout(() => btn.innerText = "Copiar", 1500);
-}
-</script>
-
 <h1>MANUAL DE INSTALACIÓN Y CONFIGURACIÓN: LABORATORIO DE CORREO LOCAL</h1>
 <p><strong>Versión:</strong> 1.0<br>
 <strong>Uso:</strong> Laboratorio de Ciberseguridad, Phishing y Pruebas de Red</p>
