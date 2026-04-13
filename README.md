@@ -266,6 +266,244 @@ Los errores más comunes durante el instalador de Roundcube suelen dividirse en 
   <li>Errores en la configuración de la base de datos</li>
 </ul>
 
+<h3>Errores más comunes</h3>
+
+<p>
+A continuación se describen los errores más frecuentes durante la instalación y configuración de Roundcube,
+así como sus soluciones recomendadas.
+</p>
+
+<hr>
+
+<h4>1. Extensiones de PHP <span style="color:red;">NOT OK</span></h4>
+
+<p>
+Si el instalador marca en rojo varias librerías, significa que faltan extensiones de PHP o no están habilitadas.
+Las más críticas suelen ser <code>intl</code>, <code>mbstring</code> y el conector de base de datos.
+</p>
+
+<p><strong>Instalar extensiones faltantes:</strong></p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo apt install php-intl php-mbstring php-gd php-xml php-mysql php-zip -y</code></pre>
+</div>
+
+<p><strong>Habilitar extensiones ya instaladas:</strong></p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo phpenmod intl mbstring pdo_mysql
+sudo systemctl restart apache2</code></pre>
+</div>
+
+
+<hr>
+
+<h4>2. Permisos en <code>/temp</code> y <code>/logs</code> (<span style="color:red;">NOT WRITABLE</span>)</h4>
+
+<p>
+Roundcube necesita escribir archivos temporales y logs. Si aparecen como <em>Not Writable</em>,
+Apache no tiene permisos suficientes.
+</p>
+
+<p><strong>Aplica los siguientes comandos dentro del directorio de Roundcube:</strong></p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>cd /var/www/html/roundcube
+sudo chown -R www-data:www-data temp/ logs/
+sudo chmod -R 775 temp/ logs/</code></pre>
+</div>
+
+<hr>
+
+<h4>3. Error de base de datos (<span style="color:red;">DSN: NOT OK</span>)</h4>
+
+<p>
+Este error indica que los datos configurados en el instalador no coinciden con los existentes en MariaDB.
+Roundcube no logra autenticarse contra la base de datos.
+</p>
+
+<h5>3.1 Asegurar los datos en MariaDB</h5>
+
+<p>
+Accede a MariaDB y recrea el usuario para evitar conflictos
+(<strong>recuerda la contraseña que establezcas</strong>):
+</p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo mysql -u root
+DROP USER IF EXISTS 'roundcube'@'localhost';
+CREATE USER 'roundcube'@'localhost' IDENTIFIED BY 'tu_password_aqui';
+GRANT ALL PRIVILEGES ON roundcubemail.* TO 'roundcube'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;</code></pre>
+</div>
+
+<h5>3.2 Actualizar el instalador de Roundcube</h5>
+
+<ul>
+  <li><strong>Database name:</strong> roundcubemail</li>
+  <li><strong>Database user:</strong> roundcube</li>
+  <li><strong>Database password:</strong> tu_password_aqui</li>
+</ul>
+
+<h5>3.3 Paso final (Importante)</h5>
+
+<p>
+Si después de pulsar <em>Update Config</em> el error continúa, edita manualmente el archivo:
+</p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo nano /var/www/html/roundcube/config/config.inc.php</code></pre>
+</div>
+
+<p>
+Verifica que la línea sea exactamente así:
+</p>
+
+<pre><code>$config['db_dsnw'] = 'mysql://roundcube:tu_password_aqui@localhost/roundcubemail';</code></pre>
+
+<p>
+Guarda con <strong>Ctrl+O</strong>, Enter y sal con <strong>Ctrl+X</strong>.
+</p>
+
+<hr>
+
+<h4>4. Error de Zona Horaria (<code>date.timezone</code>)</h4>
+
+<ol>
+  <li>Edita el archivo PHP:
+    <code>sudo nano /etc/php/8.x/apache2/php.ini</code>
+  </li>
+  <li>Busca <code>date.timezone</code> y define tu zona, por ejemplo:
+    <code>date.timezone = America/Mexico_City</code>
+  </li>
+  <li>Reinicia Apache:
+    <code>sudo systemctl restart apache2</code>
+  </li>
+</ol>
+
+<hr>
+
+<h4>5. Error al enviar correo SMTP</h4>
+
+<p>
+Este error ocurre cuando Postfix y Dovecot no están correctamente integrados.
+Roundcube intenta autenticarse, pero Postfix no puede validar al usuario.
+</p>
+
+<hr>
+
+<h4>6. Error: no se puede enviar correo SMTP (Access denied)</h4>
+
+<h5>6.1 Configurar Postfix para usar Dovecot (SASL)</h5>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo nano /etc/postfix/main.cf
+
+# Habilitar autenticación SASL vía Dovecot
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination</code></pre>
+</div>
+
+<h5>6.2 Configurar Dovecot</h5>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo nano /etc/dovecot/conf.d/10-master.conf
+
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0660
+    user = postfix
+    group = postfix
+  }
+}</code></pre>
+</div>
+
+<h5>6.3 Permitir autenticación en texto plano (solo laboratorio)</h5>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo nano /etc/dovecot/conf.d/10-auth.conf
+disable_plaintext_auth = no</code></pre>
+</div>
+
+<h5>6.4 Reiniciar servicios</h5>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo systemctl restart postfix
+sudo systemctl restart dovecot</code></pre>
+</div>
+
+<h5>6.5 Verificar configuración en Roundcube</h5>
+
+<ul>
+  <li><strong>SMTP Server:</strong> localhost o 127.0.0.1</li>
+  <li><strong>SMTP Port:</strong> 25 o 587</li>
+  <li><strong>SMTP Auth:</strong> "Check if authentication is required"</li>
+</ul>
+
+<p>
+Si el error persiste, revisa el log en tiempo real:
+</p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo tail -f /var/log/mail.log</code></pre>
+</div>
+
+<hr>
+
+<h3>7. Acceso Web y Redirección Automática</h3>
+
+<p>
+Para que al acceder a <strong>http://localhost/</strong> se cargue directamente la interfaz de correo web (Roundcube),
+realiza los siguientes pasos:
+</p>
+
+<ol>
+  <li><strong>Crear el archivo de redirección:</strong></li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo nano /var/www/html/index.php</code></pre>
+</div>
+
+<ol start="2">
+  <li><strong>Pega el siguiente código PHP:</strong></li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>&lt;?php
+header("Location: /roundcube/");
+exit;
+?&gt;</code></pre>
+</div>
+
+<ol start="3">
+  <li><strong>Elimina el archivo HTML original para evitar conflictos:</strong></li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo rm /var/www/html/index.html</code></pre>
+</div>
+
+<p>
+A partir de este momento, cualquier acceso a <code>http://localhost/</code> redirigirá automáticamente
+a la interfaz web de Roundcube.
+</p>
 
 <hr>
 
