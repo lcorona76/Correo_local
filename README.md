@@ -123,6 +123,8 @@ Reinicia: sudo systemctl restart dovecot</code></pre>
 </div>
 
 <h3>Prueba de envío</h3>
+<p>Puedes usar la herramienta mail para verificar que la comunicación interna funciona:
+# Logueado como user1, envía a user2</p>
 
 <div class="cmd-box">
   <button onclick="copyCmd(this)">Copiar</button>
