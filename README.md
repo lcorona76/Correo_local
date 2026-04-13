@@ -148,6 +148,8 @@ Reinicia: sudo systemctl restart dovecot</code></pre>
 
 <h3>Instalar dependencias</h3>
 
+<p>Roundcube necesita un servidor web, PHP y una base de datos (MariaDB o MySQL). Instálalos con:</p>
+
 <div class="cmd-box">
   <button onclick="copyCmd(this)">Copiar</button>
   <pre><code>sudo apt install apache2 mariadb-server php php-mysql libapache2-mod-php \
@@ -155,6 +157,7 @@ php-xml php-mbstring php-intl php-zip php-curl php-gd php-imagick -y</code></pre
 </div>
 
 <h3>Crear base de datos</h3>
+<p>Entra a MariaDB y crea el espacio para los datos de la interfaz:</p>
 
 <div class="cmd-box">
   <button onclick="copyCmd(this)">Copiar</button>
@@ -165,6 +168,104 @@ GRANT ALL PRIVILEGES ON roundcubemail.* TO 'roundcubeuser'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;</code></pre>
 </div>
+
+<h3>Descargar e instalar Roundcube</h3>
+
+<p>
+Lo ideal es descargar la versión estable directamente desde el sitio oficial de Roundcube. <em>https://github.com/roundcube/roundcubemail/releases</em>
+</p>
+
+<ol>
+  <li>Ve a la carpeta web:</li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>cd /var/www/html</code></pre>
+</div>
+
+<ol start="2">
+  <li>Descarga el paquete (verifica la última versión en su web oficial):</li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo wget https://github.com/roundcube/roundcubemail/releases/download/1.6.15/roundcubemail-1.6.15-complete.tar.gz</code></pre>
+</div>
+
+<ol start="3">
+  <li>Descomprime el archivo descargado:</li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo tar -xvzf roundcubemail-*.tar.gz</code></pre>
+</div>
+
+<ol start="4">
+  <li>Cambia el nombre de la carpeta a uno más simple:</li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo mv roundcubemail-1.6.6 roundcube</code></pre>
+</div>
+
+<ol start="5">
+  <li>Asigna permisos al servidor web:</li>
+</ol>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo chown -R www-data:www-data /var/www/html/roundcube</code></pre>
+</div>
+
+<hr>
+
+<h3>4. Configuración vía Navegador</h3>
+
+<p>
+Accede desde tu red a la siguiente URL:
+</p>
+
+<p>
+<strong>http://tu_ip_o_localhost/roundcube/installer</strong>
+</p>
+
+<p>
+Sigue estos pasos dentro del asistente de instalación:
+</p>
+
+<ul>
+  <li><strong>Database Setup:</strong> Ingresa los datos creados previamente
+    (<code>roundcubemail</code>, <code>roundcubeuser</code>, <code>tu_contraseña_segura</code>).</li>
+  <li><strong>IMAP Settings:</strong> Host <code>localhost</code> y puerto <code>143</code> (Dovecot debe estar activo).</li>
+  <li><strong>SMTP Settings:</strong> Host <code>localhost</code> y puerto <code>25</code>.</li>
+  <li><strong>Create Config:</strong> Al finalizar, genera el archivo de configuración.</li>
+</ul>
+
+<h3>5. Toque Final: Importar la base de datos</h3>
+
+<p>
+Para que Roundcube funcione correctamente, es necesario crear sus tablas internas.
+Ejecuta el siguiente comando (ajusta la ruta si es necesario):
+</p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo mysql -u roundcubeuser -p roundcubemail < /var/www/html/roundcube/SQL/mysql.initial.sql</code></pre>
+</div>
+
+<p>
+Los errores más comunes durante el instalador de Roundcube suelen dividirse en tres categorías:
+</p>
+
+<ul>
+  <li>Extensiones de PHP faltantes</li>
+  <li>Permisos incorrectos en carpetas</li>
+  <li>Errores en la configuración de la base de datos</li>
+</ul>
+
 
 <hr>
 
