@@ -20,7 +20,7 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <h2>2. ARQUITECTURA Y FLUJO DE DATOS</h2>
 <ol>
-  <li>Emisión: Gophish/Swaks → Postfix (SMTP 25)</li>
+  <li><b>Emisión: Gophish/Swaks → Postfix (SMTP 25)</b></li>
   <li>Recepción: Postfix valida IP → Dovecot</li>
   <li>Almacenamiento: Formato Maildir</li>
   <li>Visualización: Roundcube vía IMAP (143)</li>
