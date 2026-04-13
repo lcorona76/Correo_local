@@ -20,10 +20,10 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <h2>2. ARQUITECTURA Y FLUJO DE DATOS</h2>
 <ol>
-  <li><b>Emisión: Gophish/Swaks → Postfix (SMTP 25)</b></li>
-  <li>Recepción: Postfix valida IP → Dovecot</li>
-  <li>Almacenamiento: Formato Maildir</li>
-  <li>Visualización: Roundcube vía IMAP (143)</li>
+  <li><b>Emisión:</b> Gophish/Swaks → Postfix (SMTP 25)</li>
+  <li><b>Recepción:</b> Postfix valida IP → Dovecot</li>
+  <li><b>Almacenamiento:</b> Formato Maildir</li>
+  <li><b>Visualización:</b> Roundcube vía IMAP (143)</li>
 </ol>
 
 <hr>
@@ -44,13 +44,10 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <p>El archivo de configuración principal se encuentra en /etc/postfix/main.cf. Para un entorno local, asegúrate de ajustar estos parámetros:<p/>
 <ol>  
-  <li>myhostname: El nombre de tu máquina (ej. servidor.local).</li>
-  <li>mydestination: Lista de dominios que Postfix aceptará como locales (ej. $myhostname, localhost.localdomain, localhost).</li>
-  <li>inet_interfaces: Define en qué interfaces escucha el servidor. Para uso estrictamente local, usa loopback-only.</li>
-  <li>Complementos esenciales para un servidor completo.</li>
+  <li><b>myhostname:</b> El nombre de tu máquina (ej. servidor.local).</li>
+  <li><b>mydestination:</b> Lista de dominios que Postfix aceptará como locales (ej. $myhostname, localhost.localdomain, localhost).</li>
+  <li><b>inet_interfaces:</b> Define en qué interfaces escucha el servidor. Para uso estrictamente local, usa loopback-only.</li>
 </ol>
-  
-<p>Postfix por sí solo solo envía/recibe; para leer los correos desde un cliente o webmail, necesitarás:</p> 
 
 <p><code>sudo nano /etc/postfix/main.cf</code></p>
 
@@ -60,6 +57,9 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
   <li><code>mydomain = lab.local</code></li>
   <li><code>inet_interfaces = all</code></li>
 </ul>
+
+<h2>Complementos esenciales para un servidor completo. </h2>
+<p>Postfix por sí solo solo envía/recibe; para leer los correos desde un cliente o webmail, necesitarás:</p> 
 
 <hr>
 
