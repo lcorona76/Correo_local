@@ -45,9 +45,10 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 <p><code>sudo nano /etc/postfix/main.cf</code></p>
 
 <ul>
-  <li><code>myhostname = servidor.local</code></li>
+  <li><code>myhostname = servidor.lab.local</code></li>
   <li><code>mydestination = $myhostname, localhost</code></li>
-  <li><code>inet_interfaces = loopback-only</code></li>
+  <li><code>mydomain = lab.local</code></li>
+  <li><code>inet_interfaces = all</code></li>
 </ul>
 
 <hr>
