@@ -212,7 +212,7 @@ Lo ideal es descargar la versión estable directamente desde el sitio oficial de
   <pre><code>sudo mv roundcubemail-1.6.6 roundcube</code></pre>
 </div>
 
-<h3 style="color: #2980b9; border-left: 5px solid #2980b9; padding-left: 10px; background: #f9f9f9;">4. Configuración de Roundcube (Webmail)</h3>
+<h3 style="color: #2980b9; border-left: 5px solid #2980b9; padding-left: 10px; background: #f9f9f9;">5. Configuración de Roundcube (Webmail)</h3>
 <p style="color: #d35400; font-weight: bold;">Paso Crítico: Preparar archivo de configuración y permisos:</p>
 <pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
 
