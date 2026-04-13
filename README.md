@@ -1,5 +1,7 @@
 MANUAL DE INSTALACIÓN Y CONFIGURACIÓN: LABORATORIO DE CORREO LOCAL
+
 Versión: 1.0
+
 Uso: Laboratorio de Ciberseguridad, Phishing y Pruebas de Red.
 ________________________________________
 
