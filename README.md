@@ -44,10 +44,10 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <p>El archivo de configuración principal se encuentra en /etc/postfix/main.cf. Para un entorno local, asegúrate de ajustar estos parámetros:<p/>
 <ol>  
-  <li>1.	myhostname: El nombre de tu máquina (ej. servidor.local).</li>
-  <li>2.	mydestination: Lista de dominios que Postfix aceptará como locales (ej. $myhostname, localhost.localdomain, localhost).</li>
-  <li>3.	inet_interfaces: Define en qué interfaces escucha el servidor. Para uso estrictamente local, usa loopback-only.</li>
-  <li>3.	Complementos esenciales para un servidor completo.</li>
+  <li>myhostname: El nombre de tu máquina (ej. servidor.local).</li>
+  <li>mydestination: Lista de dominios que Postfix aceptará como locales (ej. $myhostname, localhost.localdomain, localhost).</li>
+  <li>inet_interfaces: Define en qué interfaces escucha el servidor. Para uso estrictamente local, usa loopback-only.</li>
+  <li>Complementos esenciales para un servidor completo.</li>
 </ol>
   
 <p>Postfix por sí solo solo envía/recibe; para leer los correos desde un cliente o webmail, necesitarás:</p> 
