@@ -105,6 +105,23 @@ home_mailbox = Maildir/
 sudo systemctl restart postfix</code></pre>
 </div>
 
+<h3>Instalar un servidor IMAP (Dovecot)</h3>
+
+<p>Postfix entrega el correo, pero para que tus usuarios "vean" su bandeja de entrada desde un cliente (como Thunderbird o Outlook), necesitas Dovecot:</p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>sudo apt install dovecot-imapd
+</div>
+    
+<p>Configuración básica: En /etc/dovecot/conf.d/10-mail.conf, asegúrate de que coincida con Postfix:</p>
+
+<div class="cmd-box">
+  <button onclick="copyCmd(this)">Copiar</button>
+  <pre><code>mail_location = maildir:~/Maildir
+Reinicia: sudo systemctl restart dovecot
+</div>
+
 <h3>Prueba de envío</h3>
 
 <div class="cmd-box">
