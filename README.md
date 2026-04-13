@@ -58,7 +58,7 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
   <li><code>inet_interfaces = all</code></li>
 </ul>
 
-<h2>Complementos esenciales para un servidor completo. </h2>
+<h3>Complementos esenciales para un servidor completo. </h3>
 <p>Postfix por sí solo solo envía/recibe; para leer los correos desde un cliente o webmail, necesitarás:</p> 
 <ul>
   <li><b>Dovecot:</b> Funciona como el agente de entrega (MDA) que permite acceder a los buzones mediante protocolos IMAP o POP3.</li>
@@ -66,7 +66,7 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
   <li><b>Mailx:</b> Una utilidad de línea de comandos muy útil para realizar pruebas rápidas de envío: echo "Contenido" | mail -s "Asunto" usuario@localhost. </li>
 </ul>
 
-<h2>Puertos comunes</h2>
+<h3>Puertos comunes</h3>
 
 <p>Si configuras clientes externos para conectar con tu Postfix local, ten en cuenta los puertos estándar:</p>
 <ul>
@@ -80,7 +80,7 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <p>Para crear un entorno de pruebas con múltiples usuarios en un servidor Postfix local, el enfoque cambia de "solo enviar" a "gestionar buzones". Aquí tienes los pasos clave para que tus usuarios puedan enviarse correos entre sí:</p>
 
-<h2>1. Crear los usuarios en el sistema</h2>
+<h3>Crear los usuarios en el sistema</h3>
 
 <p>Postfix, por defecto, utiliza los usuarios reales de Linux. Si quieres probar con "user1" y "user2", debes crearlos en tu terminal:</p>
 
