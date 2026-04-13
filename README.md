@@ -212,14 +212,19 @@ Lo ideal es descargar la versión estable directamente desde el sitio oficial de
   <pre><code>sudo mv roundcubemail-1.6.6 roundcube</code></pre>
 </div>
 
-<ol start="5">
-  <li>Asigna permisos al servidor web:</li>
-</ol>
+<h2 style="color: #2980b9; border-left: 5px solid #2980b9; padding-left: 10px; background: #f9f9f9;">4. Configuración de Roundcube (Webmail)</h2>
+<p style="color: #d35400; font-weight: bold;">Paso Crítico: Preparar archivo de configuración y permisos:</p>
+<pre style="background: #f4f4f4; border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
 
-<div class="cmd-box">
-  <button onclick="copyCmd(this)">Copiar</button>
-  <pre><code>sudo chown -R www-data:www-data /var/www/html/roundcube</code></pre>
-</div>
+# 1. Crear el archivo desde la plantilla (Indispensable para el instalador)
+cd /var/www/html/roundcube/config
+sudo cp config.inc.php.sample config.inc.php
+
+# 2. Asignar permisos al servidor web
+sudo chown -R www-data:www-data /var/www/html/roundcube/
+sudo chmod -R 775 /var/www/html/roundcube/temp/ /var/www/html/roundcube/logs/
+sudo chmod 664 /var/www/html/roundcube/config/config.inc.php</pre>>
+
 
 <hr>
 
