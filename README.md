@@ -42,7 +42,7 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 <h3>Archivo principal</h3>
 <p>El archivo de configuración principal se encuentra en /etc/postfix/main.cf. Para un entorno local, asegúrate de ajustar estos parámetros: </p>
 
-<p><code>/etc/postfix/main.cf</code></p>
+<p><code>sudo nano /etc/postfix/main.cf</code></p>
 
 <ul>
   <li><code>myhostname = servidor.local</code></li>
