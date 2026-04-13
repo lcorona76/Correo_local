@@ -78,6 +78,12 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
 
 <h2>5. CONFIGURACIÓN DE USUARIOS</h2>
 
+<p>Para crear un entorno de pruebas con múltiples usuarios en un servidor Postfix local, el enfoque cambia de "solo enviar" a "gestionar buzones". Aquí tienes los pasos clave para que tus usuarios puedan enviarse correos entre sí:</p>
+
+<h2>1. Crear los usuarios en el sistema</h2>
+
+<p>Postfix, por defecto, utiliza los usuarios reales de Linux. Si quieres probar con "user1" y "user2", debes crearlos en tu terminal:</p>
+
 <h3>Crear usuarios en Linux</h3>
 
 <div class="cmd-box">
@@ -85,6 +91,10 @@ diseñado para laboratorios de ciberseguridad, pruebas de penetración y simulac
   <pre><code>sudo adduser user1
 sudo adduser user2</code></pre>
 </div>
+
+<p>Es recomendable usar el formato Maildir (un archivo por mensaje) en lugar de mbox (un solo archivo gigante), ya que es más moderno y compatible con lectores de correo:</p>
+
+<p>Edita el archivo: sudo nano /etc/postfix/main.cf</p>
 
 <h3>Habilitar Maildir</h3>
 
