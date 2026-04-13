@@ -223,7 +223,7 @@ sudo cp config.inc.php.sample config.inc.php
 # 2. Asignar permisos al servidor web
 sudo chown -R www-data:www-data /var/www/html/roundcube/
 sudo chmod -R 775 /var/www/html/roundcube/temp/ /var/www/html/roundcube/logs/
-sudo chmod 664 /var/www/html/roundcube/config/config.inc.php</pre>>
+sudo chmod 664 /var/www/html/roundcube/config/config.inc.php</pre>
 
 
 <hr>
